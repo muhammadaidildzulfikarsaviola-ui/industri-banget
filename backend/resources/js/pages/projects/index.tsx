@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { FlashMessage } from '@/components/flash-message';
 import { ProjectForm } from '@/components/project-form';
+import { ThemeToggle } from '@/components/theme-toggle';
 import type { FlashMessages, Project, ProjectStatus } from '@/types/project';
 
 type Props = {
@@ -14,53 +15,62 @@ const statusLabels: Record<ProjectStatus, string> = {
     on_hold: 'Ditunda',
 };
 
+const statusStyles: Record<ProjectStatus, string> = {
+    active: 'border-success-line bg-success-soft text-success',
+    completed: 'border-info-line bg-info-soft text-info',
+    on_hold: 'border-warning-line bg-warning-soft text-warning',
+};
+
 export default function ProjectsIndex({ projects, flash }: Props) {
     return (
         <>
             <Head title="Projects" />
-            <main className="min-h-screen bg-[#111210] px-4 py-6 text-[#e9e9e3] sm:px-6 sm:py-10 md:px-10">
-                <div className="mx-auto max-w-7xl">
-                    <header className="mb-8 flex flex-wrap items-end justify-between gap-5 border-b border-[#30312c] pb-6">
+            <main className="min-h-screen bg-canvas px-4 py-7 text-ink sm:px-6 sm:py-10 lg:px-10">
+                <div className="mx-auto max-w-[1500px]">
+                    <header className="mb-9 flex flex-wrap items-end justify-between gap-5 border-b border-line pb-7">
                         <div>
                             <Link
                                 href="/"
-                                className="text-xs font-semibold tracking-[0.18em] text-[#a5a69d] hover:text-[#e8f06b] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e8f06b]"
+                                className="text-base font-semibold tracking-[0.18em] text-muted hover:text-accent-strong focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                             >
                                 ← WORKSPACE OVERVIEW
                             </Link>
-                            <p className="mt-7 font-mono text-[10px] tracking-[0.2em] text-[#e8f06b]">
+                            <p className="mt-6 font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                                 01 / PROJECT REGISTER
                             </p>
-                            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-                                Projects
-                                <span className="text-[#e8f06b]">.</span>
+                            <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+                                Proyek
                             </h1>
-                            <p className="mt-3 max-w-xl text-sm leading-6 text-[#a5a69d]">
+                            <p className="mt-3 max-w-2xl text-lg leading-7 text-muted">
                                 Simpan ruang lingkup kerja teknik industri dan
                                 pantau status setiap proyek.
                             </p>
                         </div>
-                        <p className="font-mono text-sm text-[#a5a69d]">
-                            {projects.length.toString().padStart(2, '0')} RECORD
-                            {projects.length === 1 ? '' : 'S'}
-                        </p>
+                        <div className="flex items-center gap-3 sm:gap-5">
+                            <p className="font-mono text-xs font-medium text-muted sm:text-sm">
+                                {projects.length.toString().padStart(2, '0')}{' '}
+                                RECORD
+                                {projects.length === 1 ? '' : 'S'}
+                            </p>
+                            <ThemeToggle />
+                        </div>
                     </header>
 
                     <div className="mb-6">
                         <FlashMessage flash={flash} />
                     </div>
 
-                    <div className="grid gap-8 lg:grid-cols-[minmax(270px,350px)_1fr]">
+                    <div className="grid grid-cols-1 gap-9 lg:grid-cols-[minmax(320px,400px)_minmax(0,1fr)] xl:gap-12">
                         <section
                             aria-labelledby="new-project-title"
-                            className="h-fit border border-[#30312c] bg-[#171815] p-5 sm:p-6"
+                            className="h-fit border border-line bg-surface p-5 sm:p-7"
                         >
-                            <p className="font-mono text-[10px] tracking-[0.18em] text-[#e8f06b]">
+                            <p className="font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                                 NEW ENTRY
                             </p>
                             <h2
                                 id="new-project-title"
-                                className="mt-2 mb-5 text-lg font-semibold"
+                                className="mt-2 mb-6 text-2xl font-semibold"
                             >
                                 Buat proyek
                             </h2>
@@ -68,9 +78,9 @@ export default function ProjectsIndex({ projects, flash }: Props) {
                         </section>
 
                         <section aria-labelledby="projects-list-title">
-                            <div className="mb-4 flex items-end justify-between border-b border-[#30312c] pb-4">
+                            <div className="mb-4 flex flex-wrap items-end justify-between gap-2 border-b border-line pb-4">
                                 <div>
-                                    <p className="font-mono text-[10px] tracking-[0.18em] text-[#e8f06b]">
+                                    <p className="font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                                         PROJECT REGISTER
                                     </p>
                                     <h2
@@ -80,26 +90,26 @@ export default function ProjectsIndex({ projects, flash }: Props) {
                                         Daftar proyek
                                     </h2>
                                 </div>
-                                <span className="text-xs text-[#a5a69d]">
+                                <span className="text-sm text-muted">
                                     Terbaru lebih dulu
                                 </span>
                             </div>
                             {projects.length === 0 ? (
-                                <div className="border border-dashed border-[#45463e] px-5 py-14 text-center sm:py-20">
-                                    <p className="font-mono text-xs tracking-[0.15em] text-[#e8f06b]">
+                                <div className="border border-dashed border-line-strong px-5 py-14 text-center sm:py-20">
+                                    <p className="font-mono text-base tracking-[0.15em] text-accent-strong">
                                         NO PROJECTS YET
                                     </p>
                                     <h3 className="mt-3 text-lg font-medium">
                                         Mulai dari satu masalah nyata.
                                     </h3>
-                                    <p className="mx-auto mt-2 max-w-sm text-sm leading-6 text-[#a5a69d]">
+                                    <p className="mx-auto mt-2 max-w-sm text-base leading-6 text-muted">
                                         Buat proyek pertama untuk mencatat
                                         konteks, bidang industri, dan status
                                         pekerjaannya.
                                     </p>
                                 </div>
                             ) : (
-                                <ul className="divide-y divide-[#30312c] border-y border-[#30312c]">
+                                <ul className="divide-y divide-line border-y border-line">
                                     {projects.map((project) => (
                                         <li
                                             key={project.id}
@@ -110,11 +120,13 @@ export default function ProjectsIndex({ projects, flash }: Props) {
                                                     <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                                                         <Link
                                                             href={`/projects/${project.id}`}
-                                                            className="text-base font-semibold break-words hover:text-[#e8f06b] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e8f06b]"
+                                                            className="text-xl font-semibold break-words hover:text-accent-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                                                         >
                                                             {project.name}
                                                         </Link>
-                                                        <span className="border border-[#45463e] px-2 py-1 text-[10px] font-medium tracking-wide text-[#e8f06b]">
+                                                        <span
+                                                            className={`border px-3 py-1 text-sm font-semibold ${statusStyles[project.status]}`}
+                                                        >
                                                             {
                                                                 statusLabels[
                                                                     project
@@ -123,7 +135,7 @@ export default function ProjectsIndex({ projects, flash }: Props) {
                                                             }
                                                         </span>
                                                     </div>
-                                                    <p className="mt-2 text-xs text-[#a5a69d]">
+                                                    <p className="mt-2 text-sm text-muted">
                                                         {project.industry ||
                                                             'Bidang industri belum diisi'}{' '}
                                                         <span aria-hidden="true">
@@ -142,13 +154,13 @@ export default function ProjectsIndex({ projects, flash }: Props) {
                                                             ),
                                                         )}
                                                     </p>
-                                                    <p className="mt-2 text-xs text-[#85867d]">
+                                                    <p className="mt-2 text-sm text-muted">
                                                         {project.analysis_runs_count ??
                                                             0}{' '}
                                                         analisis tersimpan
                                                     </p>
                                                     {project.description && (
-                                                        <p className="mt-3 max-w-3xl text-sm leading-6 whitespace-pre-wrap text-[#c3c4bc]">
+                                                        <p className="mt-4 max-w-3xl text-base leading-7 whitespace-pre-wrap text-muted">
                                                             {
                                                                 project.description
                                                             }
@@ -158,7 +170,7 @@ export default function ProjectsIndex({ projects, flash }: Props) {
                                                 <Link
                                                     href={`/projects/${project.id}`}
                                                     aria-label={`Buka proyek ${project.name}`}
-                                                    className="font-mono text-[10px] text-[#77786f] underline-offset-4 hover:text-[#e8f06b] hover:underline focus-visible:outline-2 focus-visible:outline-[#e8f06b]"
+                                                    className="inline-flex min-h-11 items-center font-mono text-sm font-medium whitespace-nowrap text-accent-strong underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-accent"
                                                 >
                                                     PRJ-
                                                     {project.id

@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { EoqCostChart } from '@/components/eoq-cost-chart';
 import { FlashMessage } from '@/components/flash-message';
+import { ThemeToggle } from '@/components/theme-toggle';
 import type { AnalysisRun, FlashMessages, Project } from '@/types/project';
 
 type Props = {
@@ -30,23 +31,27 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
     return (
         <>
             <Head title={`Hasil EOQ · ${project.name}`} />
-            <main className="min-h-screen bg-[#111210] px-4 py-6 text-[#e9e9e3] sm:px-6 sm:py-10 md:px-10">
-                <div className="mx-auto max-w-6xl">
-                    <header className="mb-7 border-b border-[#30312c] pb-6">
-                        <Link
-                            href={`/projects/${project.id}`}
-                            className="text-xs font-semibold tracking-[0.16em] text-[#a5a69d] hover:text-[#e8f06b] focus-visible:outline-2 focus-visible:outline-[#e8f06b]"
-                        >
-                            ← {project.name}
-                        </Link>
-                        <p className="mt-7 font-mono text-[10px] tracking-[0.2em] text-[#e8f06b]">
+            <main className="min-h-screen bg-canvas px-4 py-7 text-ink sm:px-6 sm:py-10 lg:px-10">
+                <div className="mx-auto max-w-7xl">
+                    <header className="mb-7 border-b border-line pb-6">
+                        <div className="flex items-start justify-between gap-3">
+                            <Link
+                                href={`/projects/${project.id}`}
+                                className="pt-2 text-base font-semibold tracking-[0.16em] text-muted hover:text-accent-strong focus-visible:outline-2 focus-visible:outline-accent"
+                            >
+                                ← {project.name}
+                            </Link>
+                            <ThemeToggle />
+                        </div>
+                        <p className="mt-6 font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                             SAVED ANALYSIS / EOQ-
                             {analysisRun.id.toString().padStart(4, '0')}
                         </p>
-                        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
-                            Hasil EOQ<span className="text-[#e8f06b]">.</span>
+                        <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+                            Hasil EOQ
+                            <span className="text-accent-strong">.</span>
                         </h1>
-                        <p className="mt-2 text-sm text-[#a5a69d]">
+                        <p className="mt-2 text-base text-muted">
                             {project.name} ·{' '}
                             {new Intl.DateTimeFormat('id-ID', {
                                 dateStyle: 'long',
@@ -63,50 +68,50 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                         aria-labelledby="eoq-result-title"
                         className="mb-8"
                     >
-                        <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-[#30312c] pb-4">
+                        <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-line pb-4">
                             <div>
-                                <p className="font-mono text-[10px] tracking-[0.16em] text-[#e8f06b]">
+                                <p className="font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                                     REKOMENDASI MODEL
                                 </p>
                                 <h2
                                     id="eoq-result-title"
-                                    className="mt-2 text-xl font-semibold"
+                                    className="mt-2 text-2xl font-semibold"
                                 >
                                     Kuantitas pesanan ekonomis
                                 </h2>
                             </div>
-                            <p className="font-mono text-2xl font-semibold text-[#e8f06b]">
+                            <p className="font-mono text-2xl font-semibold text-accent-strong">
                                 {quantity(results.eoq)}{' '}
-                                <span className="text-sm font-normal text-[#a5a69d]">
+                                <span className="text-base font-normal text-muted">
                                     unit/pesanan
                                 </span>
                             </p>
                         </div>
-                        <dl className="grid gap-px border border-[#30312c] bg-[#30312c] sm:grid-cols-2 xl:grid-cols-4">
-                            <div className="bg-[#171815] p-4 sm:p-5">
-                                <dt className="text-xs text-[#a5a69d]">
+                        <dl className="grid grid-cols-1 gap-px border border-line bg-line sm:grid-cols-2 xl:grid-cols-4">
+                            <div className="bg-surface p-4 sm:p-5">
+                                <dt className="text-base text-muted">
                                     Frekuensi pesanan
                                 </dt>
                                 <dd className="mt-3 font-mono text-xl">
                                     {quantity(results.orders_per_year)}{' '}
-                                    <span className="text-xs text-[#92938a]">
+                                    <span className="text-base text-muted">
                                         pesanan/tahun
                                     </span>
                                 </dd>
                             </div>
-                            <div className="bg-[#171815] p-4 sm:p-5">
-                                <dt className="text-xs text-[#a5a69d]">
+                            <div className="bg-surface p-4 sm:p-5">
+                                <dt className="text-base text-muted">
                                     Interval rata-rata
                                 </dt>
                                 <dd className="mt-3 font-mono text-xl">
                                     {quantity(results.interval_days)}{' '}
-                                    <span className="text-xs text-[#92938a]">
+                                    <span className="text-base text-muted">
                                         hari
                                     </span>
                                 </dd>
                             </div>
-                            <div className="bg-[#171815] p-4 sm:p-5">
-                                <dt className="text-xs text-[#a5a69d]">
+                            <div className="bg-surface p-4 sm:p-5">
+                                <dt className="text-base text-muted">
                                     Biaya pemesanan/tahun
                                 </dt>
                                 <dd className="mt-3 font-mono text-lg break-words">
@@ -116,8 +121,8 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                                     )}
                                 </dd>
                             </div>
-                            <div className="bg-[#171815] p-4 sm:p-5">
-                                <dt className="text-xs text-[#a5a69d]">
+                            <div className="bg-surface p-4 sm:p-5">
+                                <dt className="text-base text-muted">
                                     Biaya penyimpanan/tahun
                                 </dt>
                                 <dd className="mt-3 font-mono text-lg break-words">
@@ -128,15 +133,15 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                                 </dd>
                             </div>
                         </dl>
-                        <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2 border-l-2 border-[#e8f06b] bg-[#202218] px-4 py-3">
-                            <p className="text-sm">
+                        <div className="mt-4 flex flex-wrap items-baseline justify-between gap-3 border-l-4 border-accent bg-accent-soft px-5 py-4 sm:px-6">
+                            <p className="text-base">
                                 Total biaya persediaan relevan per tahun
                             </p>
                             <p className="font-mono text-xl font-semibold">
                                 {money(results.total_relevant_cost, currency)}
                             </p>
                         </div>
-                        <p className="mt-3 text-sm leading-6 text-[#a5a69d]">
+                        <p className="mt-3 text-base leading-6 text-muted">
                             Pada EOQ ini, biaya pemesanan tahunan{' '}
                             {money(results.annual_ordering_cost, currency)} dan
                             biaya penyimpanan tahunan{' '}
@@ -151,9 +156,9 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                     {results.comparison && (
                         <section
                             aria-labelledby="comparison-title"
-                            className="mb-8 border border-[#30312c] p-5"
+                            className="mb-8 border border-line p-5"
                         >
-                            <p className="font-mono text-[10px] tracking-[0.16em] text-[#e8f06b]">
+                            <p className="font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                                 KEBIJAKAN PEMBANDING
                             </p>
                             <h2
@@ -164,9 +169,9 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                                 {quantity(results.comparison.quantity)}{' '}
                                 unit/pesanan
                             </h2>
-                            <dl className="mt-4 grid gap-4 sm:grid-cols-3">
+                            <dl className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-3">
                                 <div>
-                                    <dt className="text-xs text-[#a5a69d]">
+                                    <dt className="text-base text-muted">
                                         Biaya pemesanan/tahun
                                     </dt>
                                     <dd className="mt-1 font-mono">
@@ -177,7 +182,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="text-xs text-[#a5a69d]">
+                                    <dt className="text-base text-muted">
                                         Biaya penyimpanan/tahun
                                     </dt>
                                     <dd className="mt-1 font-mono">
@@ -188,7 +193,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="text-xs text-[#a5a69d]">
+                                    <dt className="text-base text-muted">
                                         Total biaya relevan/tahun
                                     </dt>
                                     <dd className="mt-1 font-mono">
@@ -199,7 +204,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                                     </dd>
                                 </div>
                             </dl>
-                            <p className="mt-4 text-xs leading-5 text-[#92938a]">
+                            <p className="mt-4 text-base leading-5 text-muted">
                                 Selisih total biaya terhadap EOQ:{' '}
                                 {money(
                                     results.comparison.total_cost -
@@ -216,7 +221,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                         className="mb-8"
                     >
                         <div className="mb-4">
-                            <p className="font-mono text-[10px] tracking-[0.16em] text-[#e8f06b]">
+                            <p className="font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                                 COST CURVE
                             </p>
                             <h2
@@ -225,7 +230,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                             >
                                 Biaya relevan terhadap kuantitas pesanan
                             </h2>
-                            <p className="mt-2 text-sm text-[#a5a69d]">
+                            <p className="mt-2 text-base text-muted">
                                 Kurva dihitung dari input tersimpan. EOQ
                                 ditandai pada titik minimum biaya total.
                             </p>
@@ -238,12 +243,12 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                         />
                     </section>
 
-                    <section className="grid gap-8 border-t border-[#30312c] pt-6 md:grid-cols-2">
+                    <section className="grid grid-cols-1 gap-8 border-t border-line pt-6 md:grid-cols-2">
                         <div>
-                            <h2 className="text-sm font-semibold">
+                            <h2 className="text-base font-semibold">
                                 Input yang digunakan
                             </h2>
-                            <dl className="mt-3 space-y-2 text-sm text-[#c3c4bc]">
+                            <dl className="mt-3 space-y-2 text-base text-muted">
                                 <div className="flex justify-between gap-4">
                                     <dt>D · Permintaan tahunan</dt>
                                     <dd>
@@ -269,10 +274,10 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                             </dl>
                         </div>
                         <div>
-                            <h2 className="text-sm font-semibold">
+                            <h2 className="text-base font-semibold">
                                 Cakupan hasil
                             </h2>
-                            <p className="mt-3 text-sm leading-6 text-[#a5a69d]">
+                            <p className="mt-3 text-base leading-6 text-muted">
                                 Biaya total relevan mencakup biaya pemesanan
                                 tahunan dan biaya penyimpanan tahunan. Biaya
                                 pembelian barang, diskon kuantitas, dan titik
@@ -280,7 +285,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                             </p>
                             <Link
                                 href={`/projects/${project.id}/eoq`}
-                                className="mt-4 inline-flex min-h-10 items-center border border-[#45463e] px-3 text-sm font-medium hover:border-[#e8f06b] focus-visible:outline-2 focus-visible:outline-[#e8f06b]"
+                                className="mt-4 inline-flex min-h-10 items-center border border-line-strong px-3 text-base font-medium hover:border-accent focus-visible:outline-2 focus-visible:outline-accent"
                             >
                                 Analisis input lain →
                             </Link>

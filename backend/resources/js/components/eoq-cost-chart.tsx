@@ -37,12 +37,12 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
             )
             .join(' ');
     return (
-        <div className="overflow-x-auto border border-[#30312c] bg-[#171815] p-3 sm:p-5">
+        <div className="overflow-x-auto border border-line bg-surface p-4 sm:p-6">
             <svg
                 role="img"
                 aria-labelledby="eoq-chart-title eoq-chart-description"
                 viewBox="0 0 780 330"
-                className="w-full min-w-[620px]"
+                className="w-full min-w-[700px]"
             >
                 <title id="eoq-chart-title">Kurva biaya persediaan EOQ</title>
                 <desc id="eoq-chart-description">
@@ -62,14 +62,14 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                                 y1={position}
                                 x2={bounds.right}
                                 y2={position}
-                                stroke="#30312c"
+                                stroke="var(--chart-grid)"
                                 strokeWidth="1"
                             />
                             <text
                                 x={bounds.left - 10}
                                 y={position + 4}
-                                fill="#92938a"
-                                fontSize="10"
+                                fill="var(--muted)"
+                                fontSize="12"
                                 textAnchor="end"
                             >
                                 {compactNumber(value)}
@@ -82,39 +82,55 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                     y1={bounds.top}
                     x2={bounds.left}
                     y2={bounds.bottom}
-                    stroke="#77786f"
+                    stroke="var(--chart-axis)"
                 />
                 <line
                     x1={bounds.left}
                     y1={bounds.bottom}
                     x2={bounds.right}
                     y2={bounds.bottom}
-                    stroke="#77786f"
+                    stroke="var(--chart-axis)"
                 />
                 <path
                     d={makePath('ordering_cost')}
                     fill="none"
-                    stroke="#e8f06b"
-                    strokeWidth="2"
+                    stroke="var(--chart-ordering)"
+                    strokeWidth="2.5"
                 />
                 <path
                     d={makePath('holding_cost')}
                     fill="none"
-                    stroke="#9bb7c5"
-                    strokeWidth="2"
+                    stroke="var(--chart-holding)"
+                    strokeWidth="2.5"
                 />
                 <path
                     d={makePath('total_cost')}
                     fill="none"
-                    stroke="#f0a36b"
-                    strokeWidth="2.5"
+                    stroke="var(--chart-total)"
+                    strokeWidth="3"
                 />
+                {points.map((point) => (
+                    <circle
+                        key={point.quantity}
+                        cx={x(point.quantity)}
+                        cy={y(point.total_cost)}
+                        r="6"
+                        fill="transparent"
+                    >
+                        <title>
+                            Kuantitas: {compactNumber(point.quantity)} unit ·
+                            Pemesanan: {compactNumber(point.ordering_cost)} ·
+                            Penyimpanan: {compactNumber(point.holding_cost)} ·
+                            Total: {compactNumber(point.total_cost)}
+                        </title>
+                    </circle>
+                ))}
                 <line
                     x1={x(eoq)}
                     y1={bounds.top}
                     x2={x(eoq)}
                     y2={bounds.bottom}
-                    stroke="#f2f1e9"
+                    stroke="var(--ink)"
                     strokeDasharray="5 5"
                     strokeWidth="1.5"
                 />
@@ -122,18 +138,18 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                     cx={x(eoq)}
                     cy={y(totalAtEoq)}
                     r="4"
-                    fill="#f2f1e9"
-                    stroke="#111210"
+                    fill="var(--surface)"
+                    stroke="var(--ink)"
                     strokeWidth="2"
                 />
-                <text x={bounds.left} y="272" fill="#92938a" fontSize="10">
+                <text x={bounds.left} y="272" fill="var(--muted)" fontSize="12">
                     0
                 </text>
                 <text
                     x={bounds.right}
                     y="272"
-                    fill="#92938a"
-                    fontSize="10"
+                    fill="var(--muted)"
+                    fontSize="12"
                     textAnchor="end"
                 >
                     {compactNumber(maximumQuantity)} unit
@@ -141,8 +157,8 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                 <text
                     x="409"
                     y="301"
-                    fill="#c3c4bc"
-                    fontSize="11"
+                    fill="var(--ink)"
+                    fontSize="13"
                     textAnchor="middle"
                 >
                     Kuantitas pesanan (unit)
@@ -150,21 +166,25 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                 <text
                     x="17"
                     y="136"
-                    fill="#c3c4bc"
-                    fontSize="11"
+                    fill="var(--ink)"
+                    fontSize="13"
                     textAnchor="middle"
                     transform="rotate(-90 17 136)"
                 >
                     Biaya tahunan ({currency})
                 </text>
-                <g transform="translate(94 320)" fontSize="10" fill="#c3c4bc">
+                <g
+                    transform="translate(94 320)"
+                    fontSize="12"
+                    fill="var(--ink)"
+                >
                     <line
                         x1="0"
                         y1="-4"
                         x2="18"
                         y2="-4"
-                        stroke="#e8f06b"
-                        strokeWidth="2"
+                        stroke="var(--chart-ordering)"
+                        strokeWidth="2.5"
                     />
                     <text x="24" y="0">
                         Pemesanan
@@ -174,8 +194,8 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                         y1="-4"
                         x2="138"
                         y2="-4"
-                        stroke="#9bb7c5"
-                        strokeWidth="2"
+                        stroke="var(--chart-holding)"
+                        strokeWidth="2.5"
                     />
                     <text x="144" y="0">
                         Penyimpanan
@@ -185,8 +205,8 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                         y1="-4"
                         x2="280"
                         y2="-4"
-                        stroke="#f0a36b"
-                        strokeWidth="2.5"
+                        stroke="var(--chart-total)"
+                        strokeWidth="3"
                     />
                     <text x="286" y="0">
                         Total relevan
@@ -196,7 +216,7 @@ export function EoqCostChart({ points, eoq, totalAtEoq, currency }: Props) {
                         y1="-4"
                         x2="424"
                         y2="-4"
-                        stroke="#f2f1e9"
+                        stroke="var(--ink)"
                         strokeDasharray="4 3"
                     />
                     <text x="430" y="0">

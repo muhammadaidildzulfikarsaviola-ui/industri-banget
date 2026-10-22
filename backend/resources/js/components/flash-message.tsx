@@ -9,7 +9,7 @@ export function FlashMessage({ flash }: Props) {
         return (
             <p
                 role="status"
-                className="border border-[#69702f] bg-[#202218] px-4 py-3 text-sm text-[#e8f06b]"
+                className="border border-success-line bg-success-soft px-4 py-3 text-base text-success"
             >
                 {flash.success}
             </p>
@@ -20,7 +20,7 @@ export function FlashMessage({ flash }: Props) {
         return (
             <p
                 role="alert"
-                className="border border-[#8d4d3b] bg-[#241916] px-4 py-3 text-sm text-[#f2a58d]"
+                className="border border-danger-line bg-danger-soft px-4 py-3 text-base text-danger"
             >
                 {flash.error}
             </p>

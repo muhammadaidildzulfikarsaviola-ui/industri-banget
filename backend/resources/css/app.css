@@ -3,9 +3,112 @@
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
-@theme {
+@theme inline {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+
+    --color-canvas: var(--canvas);
+    --color-surface: var(--surface);
+    --color-line: var(--line);
+    --color-line-strong: var(--line-strong);
+    --color-ink: var(--ink);
+    --color-muted: var(--muted);
+    --color-subtle: var(--subtle);
+    --color-accent: var(--accent);
+    --color-accent-strong: var(--accent-strong);
+    --color-accent-soft: var(--accent-soft);
+    --color-success: var(--success);
+    --color-success-soft: var(--success-soft);
+    --color-success-line: var(--success-line);
+    --color-info: var(--info);
+    --color-info-soft: var(--info-soft);
+    --color-info-line: var(--info-line);
+    --color-warning: var(--warning);
+    --color-warning-soft: var(--warning-soft);
+    --color-warning-line: var(--warning-line);
+    --color-danger: var(--danger);
+    --color-danger-soft: var(--danger-soft);
+    --color-danger-line: var(--danger-line);
+}
+
+:root {
+    color-scheme: light;
+    --canvas: #e9e6de;
+    --surface: #f5f2eb;
+    --ink: #303530;
+    --muted: #62675f;
+    --subtle: #62675f;
+    --line: #d5d1c7;
+    --line-strong: #b9b5aa;
+    --accent: #d5a62e;
+    --accent-strong: #664600;
+    --accent-soft: #f2e6c5;
+    --success: #285f3b;
+    --success-soft: #e2ebdf;
+    --success-line: #bdcdb9;
+    --info: #315e75;
+    --info-soft: #e1e9eb;
+    --info-line: #bfd0d6;
+    --warning: #75510d;
+    --warning-soft: #f2e8cb;
+    --warning-line: #dfcca0;
+    --danger: #873f38;
+    --danger-soft: #f0e1dc;
+    --danger-line: #d9b9b1;
+    --chart-grid: #d5d1c7;
+    --chart-axis: #92968e;
+    --chart-ordering: #a56e06;
+    --chart-holding: #4b8198;
+    --chart-total: #3c7750;
+}
+
+:root[data-theme='dark'] {
+    color-scheme: dark;
+    --canvas: #242824;
+    --surface: #303630;
+    --ink: #e9e8e1;
+    --muted: #b6bbb2;
+    --subtle: #b6bbb2;
+    --line: #454b44;
+    --line-strong: #626a60;
+    --accent: #d5a62e;
+    --accent-strong: #e5bd58;
+    --accent-soft: #473c24;
+    --success: #a9d0ad;
+    --success-soft: #35463a;
+    --success-line: #506b54;
+    --info: #acd1df;
+    --info-soft: #34454b;
+    --info-line: #506871;
+    --warning: #e2c47b;
+    --warning-soft: #4a402d;
+    --warning-line: #695b3e;
+    --danger: #e7aaa0;
+    --danger-soft: #4b3633;
+    --danger-line: #74514b;
+    --chart-grid: #454b44;
+    --chart-axis: #8a9288;
+    --chart-ordering: #e0b64d;
+    --chart-holding: #8dc0d3;
+    --chart-total: #a3d09b;
+}
+
+@layer base {
+    html {
+        background: var(--canvas);
+    }
+
+    body {
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.6;
+        text-rendering: optimizeLegibility;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--accent-strong);
+        outline-offset: 3px;
+    }
 }

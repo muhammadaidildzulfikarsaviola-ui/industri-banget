@@ -35,9 +35,9 @@ export function ProjectForm({ project }: Props) {
     return (
         <form onSubmit={submit} className="space-y-4">
             <div>
-                <label htmlFor="name" className="mb-2 block text-sm">
+                <label htmlFor="name" className="mb-2 block text-base">
                     Nama proyek{' '}
-                    <span aria-hidden="true" className="text-[#e8f06b]">
+                    <span aria-hidden="true" className="text-accent-strong">
                         *
                     </span>
                 </label>
@@ -49,21 +49,21 @@ export function ProjectForm({ project }: Props) {
                     required
                     aria-invalid={Boolean(errors.name)}
                     aria-describedby={errors.name ? 'name-error' : undefined}
-                    className="min-h-11 w-full border border-[#45463e] bg-[#111210] px-3 text-sm outline-none placeholder:text-[#77786f] focus-visible:border-[#e8f06b] focus-visible:ring-1 focus-visible:ring-[#e8f06b]"
+                    className="min-h-12 w-full border border-line-strong bg-canvas px-3 text-base outline-none placeholder:text-subtle focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
                     placeholder="Contoh: Optimasi persediaan"
                 />
                 {errors.name && (
                     <p
                         id="name-error"
                         role="alert"
-                        className="mt-1 text-sm text-red-300"
+                        className="mt-1 text-base text-danger"
                     >
                         {errors.name}
                     </p>
                 )}
             </div>
             <div>
-                <label htmlFor="industry" className="mb-2 block text-sm">
+                <label htmlFor="industry" className="mb-2 block text-base">
                     Bidang industri
                 </label>
                 <input
@@ -77,21 +77,21 @@ export function ProjectForm({ project }: Props) {
                     aria-describedby={
                         errors.industry ? 'industry-error' : undefined
                     }
-                    className="min-h-11 w-full border border-[#45463e] bg-[#111210] px-3 text-sm outline-none placeholder:text-[#77786f] focus-visible:border-[#e8f06b] focus-visible:ring-1 focus-visible:ring-[#e8f06b]"
+                    className="min-h-12 w-full border border-line-strong bg-canvas px-3 text-base outline-none placeholder:text-subtle focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
                     placeholder="Manufaktur, logistik, ..."
                 />
                 {errors.industry && (
                     <p
                         id="industry-error"
                         role="alert"
-                        className="mt-1 text-sm text-red-300"
+                        className="mt-1 text-base text-danger"
                     >
                         {errors.industry}
                     </p>
                 )}
             </div>
             <div>
-                <label htmlFor="description" className="mb-2 block text-sm">
+                <label htmlFor="description" className="mb-2 block text-base">
                     Deskripsi
                 </label>
                 <textarea
@@ -104,21 +104,21 @@ export function ProjectForm({ project }: Props) {
                     aria-describedby={
                         errors.description ? 'description-error' : undefined
                     }
-                    className="min-h-28 w-full resize-y border border-[#45463e] bg-[#111210] px-3 py-2 text-sm outline-none placeholder:text-[#77786f] focus-visible:border-[#e8f06b] focus-visible:ring-1 focus-visible:ring-[#e8f06b]"
+                    className="min-h-28 w-full resize-y border border-line-strong bg-canvas px-3 py-2 text-base outline-none placeholder:text-subtle focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
                     placeholder="Tujuan dan ruang lingkup proyek"
                 />
                 {errors.description && (
                     <p
                         id="description-error"
                         role="alert"
-                        className="mt-1 text-sm text-red-300"
+                        className="mt-1 text-base text-danger"
                     >
                         {errors.description}
                     </p>
                 )}
             </div>
             <div>
-                <label htmlFor="status" className="mb-2 block text-sm">
+                <label htmlFor="status" className="mb-2 block text-base">
                     Status
                 </label>
                 <select
@@ -131,7 +131,7 @@ export function ProjectForm({ project }: Props) {
                     aria-describedby={
                         errors.status ? 'status-error' : undefined
                     }
-                    className="min-h-11 w-full border border-[#45463e] bg-[#111210] px-3 text-sm outline-none focus-visible:border-[#e8f06b] focus-visible:ring-1 focus-visible:ring-[#e8f06b]"
+                    className="min-h-12 w-full border border-line-strong bg-canvas px-3 text-base outline-none focus-visible:border-accent focus-visible:ring-1 focus-visible:ring-accent"
                 >
                     <option value="active">Aktif</option>
                     <option value="completed">Selesai</option>
@@ -141,7 +141,7 @@ export function ProjectForm({ project }: Props) {
                     <p
                         id="status-error"
                         role="alert"
-                        className="mt-1 text-sm text-red-300"
+                        className="mt-1 text-base text-danger"
                     >
                         {errors.status}
                     </p>
@@ -150,7 +150,7 @@ export function ProjectForm({ project }: Props) {
             <button
                 type="submit"
                 disabled={processing}
-                className="min-h-11 w-full bg-[#e8f06b] px-4 text-sm font-semibold text-[#171815] transition-colors hover:bg-[#f2f6a0] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e8f06b] disabled:cursor-wait disabled:opacity-60"
+                className="min-h-12 w-full bg-accent px-4 text-base font-semibold text-ink transition-colors hover:bg-accent-strong hover:text-surface focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:cursor-wait disabled:opacity-60"
             >
                 {processing
                     ? 'Menyimpan proyek…'

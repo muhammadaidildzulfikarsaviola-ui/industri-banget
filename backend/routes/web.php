@@ -3,9 +3,15 @@
 use App\Http\Controllers\AnalysisRunController;
 use App\Http\Controllers\EoqController;
 use App\Http\Controllers\ProjectController;
+use App\Models\Project;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', fn () => Inertia\Inertia::render('welcome', [
+    'recentProjects' => Project::query()
+        ->latest('updated_at')
+        ->limit(5)
+        ->get(['id', 'name', 'industry', 'status', 'updated_at']),
+]))->name('home');
 Route::get('/projects', [ProjectController::class, 'index'])
     ->name('projects.index');
 
