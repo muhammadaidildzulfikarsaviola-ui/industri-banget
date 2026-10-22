@@ -1,18 +1,8 @@
 import { Head } from '@inertiajs/react';
 
 const navigation = [
-    { number: '01', label: 'Dashboard', active: true },
-    { number: '02', label: 'Projects', active: false },
-    { number: '03', label: 'Analysis Workbench', active: false },
-    { number: '04', label: 'Datasets', active: false },
-    { number: '05', label: 'Reports', active: false },
-    { number: '06', label: 'Knowledge Base', active: false },
-];
-
-const metrics = [
-    { label: 'TOTAL PROJECTS', value: '00', note: 'Your analysis workspace' },
-    { label: 'ACTIVE ANALYSES', value: '00', note: 'Currently in progress' },
-    { label: 'DATASETS', value: '00', note: 'Available for analysis' },
+    { number: '01', label: 'Dashboard', href: '/', active: true },
+    { number: '02', label: 'Projects', href: '/projects', active: false },
 ];
 
 const tools = [
@@ -21,24 +11,28 @@ const tools = [
         name: 'Economic Order Quantity',
         detail: 'Inventory optimization',
         status: 'AVAILABLE',
+        available: true,
     },
     {
         code: 'FC',
         name: 'Forecasting',
         detail: 'Demand prediction',
         status: 'PLANNED',
+        available: false,
     },
     {
         code: 'SPC',
         name: 'Statistical Process Control',
         detail: 'Quality monitoring',
         status: 'PLANNED',
+        available: false,
     },
     {
         code: 'MRP',
         name: 'Material Requirements Planning',
         detail: 'Production planning',
         status: 'PLANNED',
+        available: false,
     },
 ];
 
@@ -73,7 +67,7 @@ export default function Welcome() {
                             {navigation.map((item) => (
                                 <a
                                     key={item.number}
-                                    href={item.active ? '/' : '#'}
+                                    href={item.href}
                                     className={`flex items-center gap-3 px-3 py-3 text-sm transition ${
                                         item.active
                                             ? 'border-l-2 border-[#e8f06b] bg-[#292b22] text-[#e8f06b]'
@@ -109,12 +103,12 @@ export default function Welcome() {
                                 WORKSPACE / OVERVIEW
                             </p>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <span className="h-2 w-2 rounded-full bg-[#e8f06b]" />
-                            <span className="text-xs text-[#b8b9af]">
-                                LOCAL ENVIRONMENT
-                            </span>
-                        </div>
+                        <a
+                            href="/projects"
+                            className="text-xs font-semibold text-[#e8f06b] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#e8f06b]"
+                        >
+                            Project register →
+                        </a>
                     </header>
 
                     <div className="mx-auto max-w-[1500px] p-5 md:p-10">
@@ -133,39 +127,18 @@ export default function Welcome() {
                                 </p>
                             </div>
                             <a
-                                href="#analysis-tools"
+                                href="/projects"
                                 className="inline-flex min-h-11 items-center justify-center gap-3 bg-[#e8f06b] px-5 text-sm font-semibold text-[#171815] transition hover:bg-[#f2f6a0]"
                             >
-                                Explore analysis tools{' '}
+                                Open project register{' '}
                                 <span aria-hidden="true">↗</span>
                             </a>
                         </section>
 
-                        <section className="grid grid-cols-1 gap-px border border-[#30312c] bg-[#30312c] sm:grid-cols-3">
-                            {metrics.map((metric, index) => (
-                                <div
-                                    key={metric.label}
-                                    className="bg-[#171815] p-6 md:p-7"
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-[10px] font-semibold tracking-[0.16em] text-[#92938a]">
-                                            {metric.label}
-                                        </p>
-                                        <span className="font-mono text-xs text-[#62635c]">
-                                            0{index + 1}
-                                        </span>
-                                    </div>
-                                    <p className="mt-6 font-mono text-4xl font-medium">
-                                        {metric.value}
-                                    </p>
-                                    <p className="mt-2 text-xs text-[#77786f]">
-                                        {metric.note}
-                                    </p>
-                                </div>
-                            ))}
-                        </section>
-
-                        <section className="mt-12 grid grid-cols-1 gap-10 xl:grid-cols-[1.4fr_1fr]">
+                        <section
+                            id="analysis-tools"
+                            className="mt-12 grid grid-cols-1 gap-10 xl:grid-cols-[1.4fr_1fr]"
+                        >
                             <div>
                                 <div className="mb-5 flex items-end justify-between border-b border-[#30312c] pb-4">
                                     <div>
@@ -182,36 +155,50 @@ export default function Welcome() {
                                 </div>
 
                                 <div className="divide-y divide-[#30312c] border-y border-[#30312c]">
-                                    {tools.map((tool) => (
-                                        <div
-                                            key={tool.code}
-                                            className="group flex items-center gap-4 py-5"
-                                        >
-                                            <div className="flex h-12 w-14 shrink-0 items-center justify-center border border-[#3a3b34] bg-[#1b1c18] font-mono text-xs font-bold text-[#e8f06b]">
-                                                {tool.code}
-                                            </div>
-                                            <div className="min-w-0 flex-1">
-                                                <h3 className="text-sm font-medium">
-                                                    {tool.name}
-                                                </h3>
-                                                <p className="mt-1 text-xs text-[#85867d]">
-                                                    {tool.detail}
-                                                </p>
-                                            </div>
-                                            <div className="text-right">
-                                                <span
-                                                    className={`text-[9px] font-semibold tracking-wider ${
-                                                        tool.status ===
-                                                        'AVAILABLE'
-                                                            ? 'text-[#e8f06b]'
-                                                            : 'text-[#77786f]'
-                                                    }`}
-                                                >
-                                                    {tool.status}
+                                    {tools.map((tool) => {
+                                        const contents = (
+                                            <>
+                                                <div className="flex h-12 w-14 shrink-0 items-center justify-center border border-[#3a3b34] bg-[#1b1c18] font-mono text-xs font-bold text-[#e8f06b]">
+                                                    {tool.code}
+                                                </div>
+                                                <div className="min-w-0 flex-1">
+                                                    <h3 className="text-sm font-medium">
+                                                        {tool.name}
+                                                    </h3>
+                                                    <p className="mt-1 text-xs text-[#85867d]">
+                                                        {tool.detail}
+                                                    </p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <span
+                                                        className={`text-[9px] font-semibold tracking-wider ${tool.available ? 'text-[#e8f06b]' : 'text-[#77786f]'}`}
+                                                    >
+                                                        {tool.status}
+                                                    </span>
+                                                </div>
+                                            </>
+                                        );
+
+                                        return tool.available ? (
+                                            <a
+                                                key={tool.code}
+                                                href="/projects"
+                                                className="flex items-center gap-4 py-5 hover:bg-[#171815] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#e8f06b]"
+                                            >
+                                                {contents}
+                                                <span className="text-xs text-[#e8f06b]">
+                                                    Open →
                                                 </span>
+                                            </a>
+                                        ) : (
+                                            <div
+                                                key={tool.code}
+                                                className="flex items-center gap-4 py-5"
+                                            >
+                                                {contents}
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </div>
 
@@ -227,9 +214,9 @@ export default function Welcome() {
 
                                 <div className="border border-[#30312c] bg-[#171815] p-6">
                                     <p className="text-sm leading-6 text-[#b8b9af]">
-                                        Start with a project, organize its
-                                        datasets, then run an analysis and save
-                                        the results.
+                                        Create a project, run EOQ, then reopen
+                                        the saved calculation from its analysis
+                                        history.
                                     </p>
 
                                     <div className="mt-6 space-y-5">
@@ -237,17 +224,17 @@ export default function Welcome() {
                                             [
                                                 '01',
                                                 'Create a project',
-                                                'Define the problem you want to solve.',
+                                                'Define the problem and its industry context.',
                                             ],
                                             [
                                                 '02',
-                                                'Prepare your data',
-                                                'Organize the inputs for your analysis.',
+                                                'Run EOQ',
+                                                'Enter annual demand and inventory costs.',
                                             ],
                                             [
                                                 '03',
-                                                'Run an analysis',
-                                                'Calculate, inspect, and interpret results.',
+                                                'Review saved results',
+                                                'Open the cost curve and project history.',
                                             ],
                                         ].map(([number, title, detail]) => (
                                             <div
@@ -274,12 +261,12 @@ export default function Welcome() {
                                             CURRENT STATUS
                                         </p>
                                         <p className="mt-2 text-sm">
-                                            Workspace initialized.
+                                            Projects and EOQ available.
                                         </p>
                                         <p className="mt-1 text-xs leading-5 text-[#85867d]">
-                                            Project management and analysis
-                                            workflows are the next development
-                                            milestones.
+                                            Create projects and save EOQ cost
+                                            analyses. Forecasting, MRP, SPC, and
+                                            datasets remain planned.
                                         </p>
                                     </div>
                                 </div>

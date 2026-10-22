@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
 {
@@ -12,4 +13,10 @@ class Project extends Model
         'description',
         'status',
     ];
+
+    /** @return HasMany<AnalysisRun, $this> */
+    public function analysisRuns(): HasMany
+    {
+        return $this->hasMany(AnalysisRun::class);
+    }
 }
