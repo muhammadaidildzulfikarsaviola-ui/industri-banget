@@ -1,7 +1,12 @@
 <?php
 
 use App\Models\Project;
+use App\Models\User;
 use Inertia\Testing\AssertableInertia as Assert;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 test('dashboard shows recent projects from the database', function () {
     Project::query()->create([

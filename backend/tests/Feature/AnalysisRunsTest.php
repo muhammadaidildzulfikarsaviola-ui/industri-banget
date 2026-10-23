@@ -1,8 +1,13 @@
 <?php
 
 use App\Models\Project;
+use App\Models\User;
 use App\Services\EoqCalculator;
 use Inertia\Testing\AssertableInertia as Assert;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 function createEoqProject(string $name = 'EOQ project'): Project
 {
@@ -126,4 +131,88 @@ test('an analysis result cannot be opened through a different project', function
 
     $this->get(route('analysis-runs.show', [$otherProject, $run]))
         ->assertNotFound();
+});
+
+test('forecasting is project scoped and a stored result can be reopened', function () {
+    $project = createEoqProject('Forecasting project');
+    $otherProject = createEoqProject('Other project');
+    $history = array_map(static fn (int $month): array => [
+        'period' => sprintf('2025-%02d', $month),
+        'actual' => $month * 10,
+    ], range(1, 10));
+
+    $this->get(route('projects.forecasting.create', $project))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('forecasting/create')
+            ->where('project.id', $project->id));
+
+    $this->post(route('projects.forecasting.store', $project), [
+        'analysis_name' => 'Demand 2025',
+        'unit' => 'karton',
+        'interval' => 'monthly',
+        'horizon' => 2,
+        'methods' => ['naive', 'linear_trend'],
+        'history' => $history,
+        'moving_average_window' => 3,
+        'weighted_moving_average_weights' => [0.2, 0.3, 0.5],
+        'alpha' => 0.3,
+    ])->assertSessionHasNoErrors();
+
+    $run = $project->analysisRuns()->where('type', 'forecasting')->firstOrFail();
+    $this->assertDatabaseHas('analysis_runs', ['id' => $run->id, 'project_id' => $project->id, 'type' => 'forecasting']);
+    expect($run->results['projections']['naive'])->toHaveCount(2)
+        ->and($run->results['historical'])->toHaveCount(10);
+
+    $this->get(route('analysis-runs.show', [$project, $run]))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('forecasting/show')
+            ->where('project.id', $project->id)
+            ->where('analysisRun.id', $run->id));
+
+    $this->get(route('analysis-runs.show', [$otherProject, $run]))->assertNotFound();
+});
+
+test('invalid forecasting inputs do not create analysis runs', function (string $path, mixed $value, array $errorFields) {
+    $project = createEoqProject();
+    $payload = [
+        'analysis_name' => 'Demand 2025', 'unit' => 'unit', 'interval' => 'monthly',
+        'horizon' => 2, 'methods' => ['naive'],
+        'history' => array_map(static fn (int $month): array => ['period' => sprintf('2025-%02d', $month), 'actual' => $month], range(1, 10)),
+        'moving_average_window' => 3, 'weighted_moving_average_weights' => [0.2, 0.3, 0.5], 'alpha' => 0.3,
+    ];
+
+    $payload = data_set($payload, $path, $value);
+
+    $this->from(route('projects.forecasting.create', $project))
+        ->post(route('projects.forecasting.store', $project), $payload)
+        ->assertRedirect(route('projects.forecasting.create', $project))
+        ->assertSessionHasErrors($errorFields);
+
+    expect($project->analysisRuns()->count())->toBe(0);
+})->with([
+    'empty methods' => ['methods', [], ['methods']],
+    'unknown method' => ['methods.0', 'random', ['methods.0']],
+    'infinite actual' => ['history.0.actual', '1e999', ['history.0.actual']],
+    'invalid alpha' => ['alpha', '1.2', ['alpha']],
+]);
+
+test('noncontiguous forecasting periods return a calculation error without storing a run', function () {
+    $project = createEoqProject();
+    $history = array_map(static fn (int $index): array => [
+        'period' => sprintf('2025-%02d', $index < 5 ? $index + 1 : $index + 2),
+        'actual' => $index + 1,
+    ], range(0, 9));
+
+    $this->from(route('projects.forecasting.create', $project))
+        ->post(route('projects.forecasting.store', $project), [
+            'analysis_name' => 'Demand 2025', 'unit' => 'unit', 'interval' => 'monthly',
+            'horizon' => 2, 'methods' => ['naive'], 'history' => $history,
+            'moving_average_window' => 3, 'weighted_moving_average_weights' => [0.2, 0.3, 0.5], 'alpha' => 0.3,
+        ])
+        ->assertRedirect(route('projects.forecasting.create', $project))
+        ->assertSessionHas('error');
+
+    expect($project->analysisRuns()->count())->toBe(0);
 });

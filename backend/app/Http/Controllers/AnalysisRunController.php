@@ -11,9 +11,15 @@ class AnalysisRunController extends Controller
 {
     public function show(Project $project, AnalysisRun $analysisRun): InertiaResponse
     {
-        abort_unless($analysisRun->type === 'eoq', 404);
+        $page = match ($analysisRun->type) {
+            'eoq' => 'eoq/show',
+            'forecasting' => 'forecasting/show',
+            'mrp' => 'mrp/show',
+            'spc' => 'spc/show',
+            default => abort(404),
+        };
 
-        return Inertia::render('eoq/show', [
+        return Inertia::render($page, [
             'project' => $project,
             'analysisRun' => $analysisRun,
         ]);

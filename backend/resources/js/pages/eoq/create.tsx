@@ -1,11 +1,11 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FlashMessage } from '@/components/flash-message';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { WorkspaceActions } from '@/components/workspace-actions';
 import type { AnalysisRun, FlashMessages, Project } from '@/types/project';
 
 type Props = {
     project: Project;
-    recentRuns: AnalysisRun[];
+    recentRuns: Extract<AnalysisRun, { type: 'eoq' }>[];
     flash?: FlashMessages;
 };
 
@@ -44,7 +44,7 @@ export default function EoqCreate({ project, recentRuns, flash }: Props) {
                             >
                                 ← {project.name}
                             </Link>
-                            <ThemeToggle />
+                            <WorkspaceActions />
                         </div>
                         <p className="mt-6 font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                             INVENTORY / EOQ

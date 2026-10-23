@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { WorkspaceActions } from '@/components/workspace-actions';
 import type { Project, ProjectStatus } from '@/types/project';
 
 type Props = {
@@ -23,22 +23,22 @@ const tools = [
         code: 'FC',
         name: 'Forecasting',
         detail: 'Peramalan permintaan',
-        status: 'DIRANCANG',
-        available: false,
+        status: 'TERSEDIA',
+        available: true,
     },
     {
         code: 'SPC',
         name: 'Statistical Process Control',
         detail: 'Pemantauan kualitas',
-        status: 'DIRANCANG',
-        available: false,
+        status: 'TERSEDIA',
+        available: true,
     },
     {
         code: 'MRP',
         name: 'Material Requirements Planning',
         detail: 'Perencanaan produksi',
-        status: 'DIRANCANG',
-        available: false,
+        status: 'TERSEDIA',
+        available: true,
     },
 ];
 
@@ -137,7 +137,7 @@ export default function Welcome({ recentProjects }: Props) {
                             >
                                 Daftar proyek →
                             </a>
-                            <ThemeToggle />
+                            <WorkspaceActions />
                         </div>
                     </header>
 
@@ -179,7 +179,7 @@ export default function Welcome({ recentProjects }: Props) {
                                         </h2>
                                     </div>
                                     <span className="text-sm text-muted">
-                                        1 tersedia · 3 direncanakan
+                                        4 tersedia
                                     </span>
                                 </div>
 
@@ -246,9 +246,9 @@ export default function Welcome({ recentProjects }: Props) {
 
                                 <div className="border border-line bg-surface p-5 sm:p-7">
                                     <p className="text-base leading-7 text-muted">
-                                        Buat proyek, jalankan EOQ, lalu buka
-                                        kembali hasil yang tersimpan di riwayat
-                                        proyek.
+                                        Buat proyek, jalankan analisis EOQ atau
+                                        Forecasting, lalu buka kembali hasil
+                                        yang tersimpan di riwayat proyek.
                                     </p>
 
                                     <ol className="mt-7 space-y-6">
@@ -260,8 +260,8 @@ export default function Welcome({ recentProjects }: Props) {
                                             ],
                                             [
                                                 '02',
-                                                'Jalankan EOQ',
-                                                'Masukkan permintaan tahunan dan biaya persediaan.',
+                                                'Jalankan analisis',
+                                                'Pilih EOQ atau Forecasting dari halaman proyek.',
                                             ],
                                             [
                                                 '03',

@@ -1,7 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { FlashMessage } from '@/components/flash-message';
 import { ProjectForm } from '@/components/project-form';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { WorkspaceActions } from '@/components/workspace-actions';
 import type { FlashMessages, Project } from '@/types/project';
 
 type Props = {
@@ -22,7 +22,7 @@ export default function ProjectEdit({ project, flash }: Props) {
                         >
                             ← DETAIL PROYEK
                         </Link>
-                        <ThemeToggle />
+                        <WorkspaceActions />
                     </header>
                     <p className="mt-6 font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                         PROJECT / EDIT

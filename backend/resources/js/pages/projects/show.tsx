@@ -1,12 +1,13 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 import { FlashMessage } from '@/components/flash-message';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { WorkspaceActions } from '@/components/workspace-actions';
 import type { AnalysisRun, FlashMessages, Project } from '@/types/project';
 
 type Props = {
     project: Project;
     analysisRuns: AnalysisRun[];
+    hasMrpMasterData: boolean;
     flash?: FlashMessages;
 };
 
@@ -22,9 +23,15 @@ const statusStyles = {
     on_hold: 'border-warning-line bg-warning-soft text-warning',
 } as const;
 
-export default function ProjectShow({ project, analysisRuns, flash }: Props) {
+export default function ProjectShow({
+    project,
+    analysisRuns,
+    hasMrpMasterData,
+    flash,
+}: Props) {
     const { delete: destroy, processing } = useForm({});
     const hasAnalysisHistory = analysisRuns.length > 0;
+    const deletionBlocked = hasAnalysisHistory || hasMrpMasterData;
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const cancelDeleteRef = useRef<HTMLButtonElement>(null);
 
@@ -67,7 +74,7 @@ export default function ProjectShow({ project, analysisRuns, flash }: Props) {
                             >
                                 ← PROJECT REGISTER
                             </Link>
-                            <ThemeToggle />
+                            <WorkspaceActions />
                         </div>
                         <p className="mt-6 font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                             PROJECT / PRJ-
@@ -129,6 +136,24 @@ export default function ProjectShow({ project, analysisRuns, flash }: Props) {
                             Jalankan analisis EOQ →
                         </Link>
                         <Link
+                            href={`/projects/${project.id}/forecasting`}
+                            className="inline-flex min-h-12 items-center border border-line-strong px-4 text-base font-medium hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        >
+                            Jalankan Forecasting →
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/mrp`}
+                            className="inline-flex min-h-12 items-center border border-line-strong px-4 text-base font-medium hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        >
+                            Jalankan MRP →
+                        </Link>
+                        <Link
+                            href={`/projects/${project.id}/spc`}
+                            className="inline-flex min-h-12 items-center border border-line-strong px-4 text-base font-medium hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                        >
+                            Jalankan SPC →
+                        </Link>
+                        <Link
                             href={`/projects/${project.id}/edit`}
                             className="inline-flex min-h-12 items-center border border-line-strong px-4 text-base font-medium hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                         >
@@ -137,21 +162,24 @@ export default function ProjectShow({ project, analysisRuns, flash }: Props) {
                         <button
                             type="button"
                             onClick={() => setDeleteDialogOpen(true)}
-                            disabled={hasAnalysisHistory || processing}
+                            disabled={deletionBlocked || processing}
                             title={
                                 hasAnalysisHistory
                                     ? 'Proyek yang memiliki riwayat analisis tidak dapat dihapus.'
-                                    : undefined
+                                    : hasMrpMasterData
+                                      ? 'Hapus master item MRP di proyek terlebih dahulu.'
+                                      : undefined
                             }
                             className="min-h-12 border border-danger-line px-4 text-base font-medium text-danger hover:bg-danger-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-danger disabled:cursor-not-allowed disabled:opacity-50"
                         >
                             {processing ? 'Menghapus…' : 'Hapus proyek'}
                         </button>
                     </div>
-                    {hasAnalysisHistory && (
+                    {deletionBlocked && (
                         <p className="mt-2 text-base text-muted">
-                            Penghapusan dikunci karena proyek memiliki riwayat
-                            analisis yang harus dipertahankan.
+                            {hasAnalysisHistory
+                                ? 'Penghapusan dikunci karena proyek memiliki riwayat analisis yang harus dipertahankan.'
+                                : 'Penghapusan dikunci karena proyek memiliki master item MRP yang harus dihapus terlebih dahulu.'}
                         </p>
                     )}
 
@@ -177,8 +205,9 @@ export default function ProjectShow({ project, analysisRuns, flash }: Props) {
                         </div>
                         {analysisRuns.length === 0 ? (
                             <p className="border border-dashed border-line-strong px-5 py-10 text-base text-muted">
-                                Belum ada analisis. Jalankan EOQ untuk menyimpan
-                                input dan hasil perhitungan di proyek ini.
+                                Belum ada analisis. Jalankan EOQ atau
+                                Forecasting untuk menyimpan input dan hasil
+                                perhitungan di proyek ini.
                             </p>
                         ) : (
                             <ul className="divide-y divide-line border-y border-line">
@@ -189,14 +218,42 @@ export default function ProjectShow({ project, analysisRuns, flash }: Props) {
                                     >
                                         <div>
                                             <p className="text-base font-semibold">
-                                                EOQ ·{' '}
-                                                {new Intl.NumberFormat(
-                                                    'id-ID',
-                                                    {
-                                                        maximumFractionDigits: 2,
-                                                    },
-                                                ).format(run.results.eoq)}{' '}
-                                                unit
+                                                {run.type === 'eoq' ? (
+                                                    <>
+                                                        EOQ ·{' '}
+                                                        {new Intl.NumberFormat(
+                                                            'id-ID',
+                                                            {
+                                                                maximumFractionDigits: 2,
+                                                            },
+                                                        ).format(
+                                                            run.results.eoq,
+                                                        )}{' '}
+                                                        unit
+                                                    </>
+                                                ) : run.type ===
+                                                  'forecasting' ? (
+                                                    <>
+                                                        Forecasting ·{' '}
+                                                        {
+                                                            run.inputs
+                                                                .analysis_name
+                                                        }
+                                                    </>
+                                                ) : run.type === 'mrp' ? (
+                                                    <>
+                                                        MRP ·{' '}
+                                                        {run.inputs.plan_name}
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        SPC ·{' '}
+                                                        {
+                                                            run.inputs
+                                                                .analysis_name
+                                                        }
+                                                    </>
+                                                )}
                                             </p>
                                             <p className="mt-1 text-base text-muted">
                                                 {new Intl.DateTimeFormat(

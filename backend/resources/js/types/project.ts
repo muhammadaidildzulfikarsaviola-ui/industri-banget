@@ -10,13 +10,35 @@ export type Project = {
     analysis_runs_count?: number;
 };
 
-export type AnalysisRun = {
-    id: number;
-    type: 'eoq';
-    inputs: EoqInputs;
-    results: EoqResults;
-    created_at: string;
-};
+export type AnalysisRun =
+    | {
+          id: number;
+          type: 'eoq';
+          inputs: EoqInputs;
+          results: EoqResults;
+          created_at: string;
+      }
+    | {
+          id: number;
+          type: 'forecasting';
+          inputs: import('@/types/forecasting').ForecastInputs;
+          results: import('@/types/forecasting').ForecastResults;
+          created_at: string;
+      }
+    | {
+          id: number;
+          type: 'mrp';
+          inputs: import('@/types/mrp').MrpInputs;
+          results: import('@/types/mrp').MrpResults;
+          created_at: string;
+      }
+    | {
+          id: number;
+          type: 'spc';
+          inputs: import('@/types/spc').SpcInputs;
+          results: import('@/types/spc').SpcResults;
+          created_at: string;
+      };
 
 export type EoqInputs = {
     annual_demand: number;

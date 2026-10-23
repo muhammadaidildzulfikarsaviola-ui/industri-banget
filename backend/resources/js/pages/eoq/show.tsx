@@ -1,12 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import { EoqCostChart } from '@/components/eoq-cost-chart';
 import { FlashMessage } from '@/components/flash-message';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { WorkspaceActions } from '@/components/workspace-actions';
 import type { AnalysisRun, FlashMessages, Project } from '@/types/project';
 
 type Props = {
     project: Project;
-    analysisRun: AnalysisRun;
+    analysisRun: Extract<AnalysisRun, { type: 'eoq' }>;
     flash?: FlashMessages;
 };
 
@@ -41,7 +41,7 @@ export default function EoqShow({ project, analysisRun, flash }: Props) {
                             >
                                 ← {project.name}
                             </Link>
-                            <ThemeToggle />
+                            <WorkspaceActions />
                         </div>
                         <p className="mt-6 font-mono text-sm font-semibold tracking-[0.16em] text-accent-strong">
                             SAVED ANALYSIS / EOQ-

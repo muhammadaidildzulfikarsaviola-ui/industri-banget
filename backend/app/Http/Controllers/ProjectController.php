@@ -22,6 +22,7 @@ class ProjectController extends Controller
         return Inertia::render('projects/show', [
             'project' => $project,
             'analysisRuns' => $project->analysisRuns()->latest()->get(),
+            'hasMrpMasterData' => $project->mrpItems()->exists(),
         ]);
     }
 
@@ -68,6 +69,10 @@ class ProjectController extends Controller
     {
         if ($project->analysisRuns()->exists()) {
             return back()->with('error', 'Proyek memiliki riwayat analisis dan tidak dapat dihapus.');
+        }
+
+        if ($project->mrpItems()->exists()) {
+            return back()->with('error', 'Hapus master item MRP dari proyek sebelum menghapus proyek.');
         }
 
         $project->delete();

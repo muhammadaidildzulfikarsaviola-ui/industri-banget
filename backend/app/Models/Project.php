@@ -19,4 +19,16 @@ class Project extends Model
     {
         return $this->hasMany(AnalysisRun::class);
     }
+
+    /** @return HasMany<MrpItem, $this> */
+    public function mrpItems(): HasMany
+    {
+        return $this->hasMany(MrpItem::class);
+    }
+
+    /** @return HasMany<MrpBomLine, $this> */
+    public function mrpBomLines(): HasMany
+    {
+        return $this->hasMany(MrpBomLine::class);
+    }
 }
